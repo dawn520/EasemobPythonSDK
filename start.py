@@ -66,17 +66,19 @@ if __name__ == '__main__':
         client.admin_token = TOKEN
     print('####管理员token：' + client.admin_token)
     client.admin_rest_token = 'Bearer ' + client.admin_token
-    timeArray = time.localtime(nowTimestamp)
-    q = int(time.strftime("%Y%m%d%H", timeArray))
-    if q - LAST_MESSAGE_TIME > 2:
+
+    if nowTimestamp - LAST_MESSAGE_TIME > 7200:
         print('####开始执行未完成的任务')
-    while q - LAST_MESSAGE_TIME >= 2:
-        print('####获取' + str(LAST_MESSAGE_TIME) + "的聊天记录")
-        result = do_it(str(LAST_MESSAGE_TIME))
+    while nowTimestamp - LAST_MESSAGE_TIME >= 7200:
+        timeArray = time.localtime(LAST_MESSAGE_TIME)
+        q = time.strftime("%Y%m%d%H", timeArray)
+        print('####获取' + q + "的聊天记录")
+        result = do_it(q)
         if result == 0 or result == 404:
-            LAST_MESSAGE_TIME += 1
+            LAST_MESSAGE_TIME += 3600
             config.set('huanxin', 'last_message_time', str(LAST_MESSAGE_TIME))
             config.write(open("./config.conf", "w"))
-        if q - LAST_MESSAGE_TIME > 1:
+        if nowTimestamp - LAST_MESSAGE_TIME > 3600:
             print('####休息1分钟')
-            time.sleep(40)
+            time.sleep(50)
+    print('#####任务完成')
