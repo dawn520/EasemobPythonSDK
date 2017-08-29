@@ -44,7 +44,7 @@ class PyClient(object):
             self.client_secret = client_secret
             self.admin_token = response.data['access_token']
             self.admin_rest_token = 'Bearer ' + self.admin_token
-            print(self.admin_token)
+            # print(self.admin_token)
 
             return self.admin_token
 
