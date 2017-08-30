@@ -44,7 +44,7 @@ class DB:
               "PRIMARY KEY (`id`), KEY `history_messages_to_index` (`to`), " \
               "KEY `history_messages_from_index` (`from`) " \
               ") ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
-        sql = sql.encode("utf-8")
+        # sql = sql.encode("utf-8")
         cursor.execute(sql)
         # SQL 插入语句
         sql = "INSERT INTO "+self.table+"( `msg_id`, `timestamp`, `direction`, `to`, `from`, `chat_type`, " \
