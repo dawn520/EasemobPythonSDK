@@ -14,7 +14,7 @@ class DB:
         self.table = db_table = config.get("db", "db_table")
 
         try:
-            self.db = pymysql.connect(host=db_host, user=db_user, password=db_password, db=db_database, charset='utf8')
+            self.db = pymysql.connect(host=db_host, user=db_user, password=db_password, db=db_database, charset='utf-8')
         except:
             print('连接数据库失败')
 
@@ -26,6 +26,9 @@ class DB:
         db = self.db
         # 使用cursor()方法获取操作游标
         cursor = db.cursor()
+        sql = 'SET NAMES utf8'
+
+        cursor.execute(sql)
 
         sql = "CREATE TABLE IF NOT EXISTS "+self.table+" ( " \
               "`id` int(10) unsigned NOT NULL AUTO_INCREMENT, " \
