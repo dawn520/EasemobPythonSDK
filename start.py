@@ -38,7 +38,8 @@ def do_it(message_time):
             now = datetime.datetime.now()
             for line in jsonStr:
                 line = str(line, encoding='utf-8')
-                data = json.loads(line, encoding='utf-8' )
+                data = json.loads(line, encoding='utf-8')
+                print(data)
                 data['payload'] = json.dumps(data['payload'])
                 data['created_at'] = data['updated_at'] = now
                 # list.append(list(data.values()))
