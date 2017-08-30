@@ -14,7 +14,7 @@ class DB:
         self.table = db_table = config.get("db", "db_table")
 
         try:
-            self.db = pymysql.connect(host=db_host, user=db_user, password=db_password,db=db_database)
+            self.db = pymysql.connect(host=db_host, user=db_user, password=db_password, db=db_database, charset='utf-8')
         except:
             print('连接数据库失败')
 
