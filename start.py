@@ -39,11 +39,12 @@ def do_it(message_time):
             for line in jsonStr:
                 line = str(line, encoding='utf-8')
                 data = json.loads(line, encoding='utf-8')
-                print(data)
+                # print(data)
                 data['payload'] = json.dumps(data['payload'],ensure_ascii=False)
                 data['created_at'] = data['updated_at'] = now
                 # list.append(list(data.values()))
                 newData.append(list(data.values()))
+                print(newData)
             # 入库
             db = DB(config)
             db.insert(newData)
