@@ -43,7 +43,9 @@ def do_it(message_time):
                 data['payload'] = json.dumps(data['payload'],ensure_ascii=False)
                 data['created_at'] = data['updated_at'] = now
                 # list.append(list(data.values()))
-                newData.append(list(data.values()))
+                p = [data['msg_id'], data['timestamp'], data['direction'], data['to'], data['from'], data['chat_type'],
+                     data['payload'],data['created_at'], data['updated_at']]
+                newData.append(p)
                 print(newData)
             # 入库
             db = DB(config)
