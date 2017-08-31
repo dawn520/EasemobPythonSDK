@@ -52,7 +52,7 @@ LAST_GET_TIME = int(config.get('huanxin', 'last_get_time'))
 LAST_MESSAGE_TIME = int(config.get('huanxin', 'last_message_time'))
 
 
-def do_it(message_time):
+def do_it(client, message_time):
     filename = 'temp/' + message_time + '.gz'
     response = client.get_history_message(message_time)
     if response.code == 0:
@@ -83,7 +83,7 @@ def do_it(message_time):
     return response.code
 
 
-def main():
+def main(LAST_MESSAGE_TIME):
     client = PyClient(APP_KEY, DEFAULT_REST, CLIENT_ID, CLIENT_SECRET)
     # 获取token
     logger.info('任务开始执行')
@@ -108,7 +108,7 @@ def main():
         timeArray = time.localtime(LAST_MESSAGE_TIME)
         q = time.strftime("%Y%m%d%H", timeArray)
         logger.info('获取' + q + "的聊天记录")
-        result = do_it(q)
+        result = do_it(client, q)
         if result == 0 or result == 404:
             LAST_MESSAGE_TIME += 3600
             config.set('huanxin', 'last_message_time', str(LAST_MESSAGE_TIME))
@@ -122,7 +122,7 @@ def main():
 
 if __name__ == '__main__':
     try:
-        main()
+        main(LAST_MESSAGE_TIME)
     except KeyboardInterrupt:
         logger.info('你已经退出程序')
         sys.exit()
