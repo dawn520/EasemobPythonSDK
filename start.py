@@ -4,6 +4,7 @@ import datetime
 import json
 import os
 import configparser
+import socket
 import time
 
 import sys
@@ -14,7 +15,6 @@ from easemob.emclient import *
 from utils.DB import DB
 from utils.extract import extract
 from utils.ungz import un_gz
-
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # 开启日志
@@ -31,15 +31,17 @@ ch.setFormatter(formatter)
 logger.addHandler(fh)
 logger.addHandler(ch)
 # 进程锁，通知只能执行一个脚本
-# 判断文件是否存在
-lockFile = os.path.join(BASE_DIR, "temp/lock")
-if os.path.exists(lockFile):
-    # 文件存在，说明脚本正在执行
-    logger.info("脚本正在执行,退出！")
+lock = 1
+try:
+    global lock
+    hyf_suo = socket.socket()
+    add = ('', 65587)
+    hyf_suo.bind(add)
+    lock = 1
+except:
+    lock = 2
+    logger.info('already has an instance')
     sys.exit()
-else:
-    # 文件不存在，创建文件，并执行任务。
-    lockFile = open(lockFile, "w+")
 # 读取配置文件
 config = configparser.ConfigParser()
 configFile = os.path.join(BASE_DIR, "config.conf")
@@ -51,7 +53,6 @@ DEFAULT_REST = config.get('huanxin', 'default_rest')
 TOKEN = config.get('huanxin', 'token')
 LAST_GET_TIME = int(config.get('huanxin', 'last_get_time'))
 LAST_MESSAGE_TIME = int(config.get('huanxin', 'last_message_time'))
-
 
 
 def do_it(message_time):
@@ -70,11 +71,11 @@ def do_it(message_time):
                 line = str(line, encoding='utf-8')
                 data = json.loads(line, encoding='utf-8')
                 # print(data)
-                data['payload'] = json.dumps(data['payload'],ensure_ascii=False)
+                data['payload'] = json.dumps(data['payload'], ensure_ascii=False)
                 data['created_at'] = data['updated_at'] = now
                 # list.append(list(data.values()))
                 p = [data['msg_id'], data['timestamp'], data['direction'], data['to'], data['from'], data['chat_type'],
-                     data['payload'],data['created_at'], data['updated_at']]
+                     data['payload'], data['created_at'], data['updated_at']]
                 newData.append(p)
                 print(newData)
             # 入库
