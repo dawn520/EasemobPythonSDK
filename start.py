@@ -6,6 +6,8 @@ import os
 import configparser
 import time
 
+import sys
+
 from easemob.emclient import *
 from utils.DB import DB
 from utils.extract import extract
@@ -87,3 +89,4 @@ if __name__ == '__main__':
             print('####休息1分钟')
             time.sleep(50)
     print('#####任务完成')
+    sys.exit()
