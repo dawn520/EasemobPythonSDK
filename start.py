@@ -14,7 +14,8 @@ from utils.ungz import un_gz
 # 读取配置文件
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 config = configparser.ConfigParser()
-config.read(os.path.join(BASE_DIR, "config.conf"))
+configFile = os.path.join(BASE_DIR, "config.conf")
+config.read(configFile)
 APP_KEY = config.get('huanxin', 'app_key')
 CLIENT_ID = config.get('huanxin', 'client_id')
 CLIENT_SECRET = config.get('huanxin', 'client_secret')
@@ -65,7 +66,7 @@ if __name__ == '__main__':
         client.get_admin_token(CLIENT_ID, CLIENT_SECRET)
         config.set('huanxin', 'token', client.admin_token)
         config.set('huanxin', 'last_get_time', str(nowTimestamp))
-        config.write(open("./config.conf", "w"))
+        config.write(open(configFile, "w"))
     else:
         client.admin_token = TOKEN
     print('####管理员token：' + client.admin_token)
