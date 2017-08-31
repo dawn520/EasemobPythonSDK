@@ -82,7 +82,7 @@ if __name__ == '__main__':
         if result == 0 or result == 404:
             LAST_MESSAGE_TIME += 3600
             config.set('huanxin', 'last_message_time', str(LAST_MESSAGE_TIME))
-            config.write(open("./config.conf", "w"))
+            config.write(open(configFile, "w"))
         if nowTimestamp - LAST_MESSAGE_TIME > 3600:
             print('####休息1分钟')
             time.sleep(50)
