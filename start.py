@@ -90,7 +90,7 @@ if __name__ == '__main__':
     nowTimestamp = int(time.time())
     if len(TOKEN) == 0 or nowTimestamp - LAST_GET_TIME > 86400:
         logger.info('管理员token已过期，获取中……')
-        while client.get_admin_token(CLIENT_ID, CLIENT_SECRET) == '':
+        while client.get_admin_token(CLIENT_ID, CLIENT_SECRET) != 1:
             logger.info('获取失败，休息一分钟再获取')
             time.sleep(60)
         config.set('huanxin', 'token', client.admin_token)

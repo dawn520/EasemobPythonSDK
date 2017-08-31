@@ -46,9 +46,9 @@ class PyClient(object):
             self.admin_rest_token = 'Bearer ' + self.admin_token
             # print(self.admin_token)
 
-            return self.admin_token
+            return 1
 
-        return ''
+        return response.code
 
     def delete_user(self, username):
         if len(self.admin_token) == 0 or len(self.username) == 0:
