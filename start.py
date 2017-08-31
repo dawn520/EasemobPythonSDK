@@ -83,7 +83,7 @@ def do_it(message_time):
     return response.code
 
 
-if __name__ == '__main__':
+def main():
     client = PyClient(APP_KEY, DEFAULT_REST, CLIENT_ID, CLIENT_SECRET)
     # 获取token
     logger.info('任务开始执行')
@@ -92,7 +92,7 @@ if __name__ == '__main__':
         logger.info('管理员token已过期，获取中……')
         code = client.get_admin_token(CLIENT_ID, CLIENT_SECRET)
         while code != 1:
-            logger.info('获取失败，,状态码：'+str(code)+',休息一分钟再获取')
+            logger.info('获取失败，,状态码：' + str(code) + ',休息一分钟再获取')
             time.sleep(60)
         config.set('huanxin', 'token', client.admin_token)
         config.set('huanxin', 'last_get_time', str(nowTimestamp))
@@ -118,3 +118,12 @@ if __name__ == '__main__':
             time.sleep(60)
     logger.info('任务完成')
     sys.exit()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        logger.info('你已经退出程序')
+        sys.exit()
+
