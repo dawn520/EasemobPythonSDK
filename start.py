@@ -92,7 +92,9 @@ if __name__ == '__main__':
     nowTimestamp = int(time.time())
     if len(TOKEN) == 0 or nowTimestamp - LAST_GET_TIME > 86400:
         logger.info('管理员token已过期，获取中……')
-        client.get_admin_token(CLIENT_ID, CLIENT_SECRET)
+        while client.get_admin_token(CLIENT_ID, CLIENT_SECRET) == '':
+            logger.info('获取失败，休息一分钟再获取')
+            time.sleep(60)
         config.set('huanxin', 'token', client.admin_token)
         config.set('huanxin', 'last_get_time', str(nowTimestamp))
         config.write(open(configFile, "w"))
@@ -114,7 +116,7 @@ if __name__ == '__main__':
             config.write(open(configFile, "w"))
         if nowTimestamp - LAST_MESSAGE_TIME > 3600:
             logger.info('休息1分钟')
-            time.sleep(50)
+            time.sleep(60)
     logger.info('任务完成')
     os.remove(lockFile)
     sys.exit()
