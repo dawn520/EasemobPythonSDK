@@ -82,47 +82,42 @@ def do_it(client, message_time):
         logger.info('请求错误:状态码' + str(response.code))
     return response.code
 
-
-def main(LAST_MESSAGE_TIME):
-    client = PyClient(APP_KEY, DEFAULT_REST, CLIENT_ID, CLIENT_SECRET)
-    # 获取token
-    logger.info('任务开始执行')
-    nowTimestamp = int(time.time())
-    if len(TOKEN) == 0 or nowTimestamp - LAST_GET_TIME > 86400:
-        logger.info('管理员token已过期，获取中……')
-        code = client.get_admin_token(CLIENT_ID, CLIENT_SECRET)
-        while code != 1:
-            logger.info('获取失败，,状态码：' + str(code) + ',休息一分钟再获取')
-            time.sleep(60)
-        config.set('huanxin', 'token', client.admin_token)
-        config.set('huanxin', 'last_get_time', str(nowTimestamp))
-        config.write(open(configFile, "w"))
-    else:
-        client.admin_token = TOKEN
-    logger.info('管理员token：' + client.admin_token)
-    client.admin_rest_token = 'Bearer ' + client.admin_token
-
-    if nowTimestamp - LAST_MESSAGE_TIME > 7200:
-        logger.info('开始执行未完成的任务')
-    while nowTimestamp - LAST_MESSAGE_TIME >= 7200:
-        timeArray = time.localtime(LAST_MESSAGE_TIME)
-        q = time.strftime("%Y%m%d%H", timeArray)
-        logger.info('获取' + q + "的聊天记录")
-        result = do_it(client, q)
-        if result == 0 or result == 404:
-            LAST_MESSAGE_TIME += 3600
-            config.set('huanxin', 'last_message_time', str(LAST_MESSAGE_TIME))
-            config.write(open(configFile, "w"))
-        if nowTimestamp - LAST_MESSAGE_TIME > 3600:
-            logger.info('休息1分钟')
-            time.sleep(60)
-    logger.info('任务完成')
-    sys.exit()
-
-
 if __name__ == '__main__':
     try:
-        main(LAST_MESSAGE_TIME)
+        client = PyClient(APP_KEY, DEFAULT_REST, CLIENT_ID, CLIENT_SECRET)
+        # 获取token
+        logger.info('任务开始执行')
+        nowTimestamp = int(time.time())
+        if len(TOKEN) == 0 or nowTimestamp - LAST_GET_TIME > 86400:
+            logger.info('管理员token已过期，获取中……')
+            code = client.get_admin_token(CLIENT_ID, CLIENT_SECRET)
+            while code != 1:
+                logger.info('获取失败，,状态码：' + str(code) + ',休息一分钟再获取')
+                time.sleep(60)
+            config.set('huanxin', 'token', client.admin_token)
+            config.set('huanxin', 'last_get_time', str(nowTimestamp))
+            config.write(open(configFile, "w"))
+        else:
+            client.admin_token = TOKEN
+        logger.info('管理员token：' + client.admin_token)
+        client.admin_rest_token = 'Bearer ' + client.admin_token
+
+        if nowTimestamp - LAST_MESSAGE_TIME > 7200:
+            logger.info('开始执行未完成的任务')
+        while nowTimestamp - LAST_MESSAGE_TIME >= 7200:
+            timeArray = time.localtime(LAST_MESSAGE_TIME)
+            q = time.strftime("%Y%m%d%H", timeArray)
+            logger.info('获取' + q + "的聊天记录")
+            result = do_it(client, q)
+            if result == 0 or result == 404:
+                LAST_MESSAGE_TIME += 3600
+                config.set('huanxin', 'last_message_time', str(LAST_MESSAGE_TIME))
+                config.write(open(configFile, "w"))
+            if nowTimestamp - LAST_MESSAGE_TIME > 3600:
+                logger.info('休息1分钟')
+                time.sleep(60)
+        logger.info('任务完成')
+        sys.exit()
     except KeyboardInterrupt:
         logger.info('你已经退出程序')
         sys.exit()
