@@ -30,16 +30,13 @@ fh.setFormatter(formatter)
 ch.setFormatter(formatter)
 logger.addHandler(fh)
 logger.addHandler(ch)
-# 进程锁，通知只能执行一个脚本
-lock = 1
+# 进程锁，同时只能执行一个脚本
 try:
-    global lock
     hyf_suo = socket.socket()
-    add = ('', 65587)
+    add = ('', 24961)
     hyf_suo.bind(add)
-    lock = 1
-except:
-    lock = 2
+except Exception as e:
+    print(e)
     logger.info('already has an instance')
     sys.exit()
 # 读取配置文件
