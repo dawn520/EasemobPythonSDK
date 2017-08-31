@@ -12,8 +12,9 @@ from utils.extract import extract
 from utils.ungz import un_gz
 
 # 读取配置文件
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 config = configparser.ConfigParser()
-config.read("./config.conf")
+config.read(os.path.join(BASE_DIR, "config.conf"))
 APP_KEY = config.get('huanxin', 'app_key')
 CLIENT_ID = config.get('huanxin', 'client_id')
 CLIENT_SECRET = config.get('huanxin', 'client_secret')
@@ -30,7 +31,6 @@ def do_it(message_time):
         # 获取下载文件URL
         url = response.data['data'][0]['url']
         # 获取目录
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         filename = os.path.join(BASE_DIR, filename)
         if client.download_file(url, filename):
             jsonStr = un_gz(filename)
