@@ -15,20 +15,9 @@ from utils.DB import DB
 from utils.extract import extract
 from utils.ungz import un_gz
 
-# 读取配置文件
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-config = configparser.ConfigParser()
-configFile = os.path.join(BASE_DIR, "config.conf")
-config.read(configFile)
-APP_KEY = config.get('huanxin', 'app_key')
-CLIENT_ID = config.get('huanxin', 'client_id')
-CLIENT_SECRET = config.get('huanxin', 'client_secret')
-DEFAULT_REST = config.get('huanxin', 'default_rest')
-TOKEN = config.get('huanxin', 'token')
-LAST_GET_TIME = int(config.get('huanxin', 'last_get_time'))
-LAST_MESSAGE_TIME = int(config.get('huanxin', 'last_message_time'))
 # 开启日志
-# 第一步，创建一个logger
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logfile = os.path.join(BASE_DIR, "log/log.txt")
@@ -41,6 +30,27 @@ fh.setFormatter(formatter)
 ch.setFormatter(formatter)
 logger.addHandler(fh)
 logger.addHandler(ch)
+# 进程锁，通知只能执行一个脚本
+# 判断文件是否存在
+lockFile = os.path.join(BASE_DIR, "temp/lock")
+if os.path.exists(lockFile):
+    # 文件存在，说明脚本正在执行
+    logger.info("脚本正在执行,退出！")
+    sys.exit()
+else:
+    # 文件不存在，创建文件，并执行任务。
+    lockFile = open(lockFile, "w+")
+# 读取配置文件
+config = configparser.ConfigParser()
+configFile = os.path.join(BASE_DIR, "config.conf")
+config.read(configFile)
+APP_KEY = config.get('huanxin', 'app_key')
+CLIENT_ID = config.get('huanxin', 'client_id')
+CLIENT_SECRET = config.get('huanxin', 'client_secret')
+DEFAULT_REST = config.get('huanxin', 'default_rest')
+TOKEN = config.get('huanxin', 'token')
+LAST_GET_TIME = int(config.get('huanxin', 'last_get_time'))
+LAST_MESSAGE_TIME = int(config.get('huanxin', 'last_message_time'))
 
 
 
@@ -106,4 +116,5 @@ if __name__ == '__main__':
             logger.info('休息1分钟')
             time.sleep(50)
     logger.info('任务完成')
+    os.remove(lockFile)
     sys.exit()
