@@ -1,0 +1,6 @@
+2017-08-31 14:27:42,155 - start.py[line:81] - INFO: 任务开始执行
+2017-08-31 14:27:42,155 - start.py[line:91] - INFO: 管理员token：YWMtcOH2aIudEeeFsKVkFP7ffQAAAAAAAAAAAAAAAAAAAAG6RN8wINgR57kbyf0xVXH2AgMAAAFeJssYLwBPGgCsdoOrr0JUclzqqwuBzb7qTHNpDgdBcLzkTLnzefhPDg
+2017-08-31 14:27:42,155 - start.py[line:95] - INFO: 开始执行未完成的任务
+2017-08-31 14:27:42,155 - start.py[line:99] - INFO: 获取2017082817的聊天记录
+2017-08-31 14:27:42,321 - start.py[line:74] - INFO: 请求错误:状态码429
+2017-08-31 14:27:42,321 - start.py[line:106] - INFO: 休息1分钟
