@@ -102,6 +102,9 @@ if __name__ == '__main__':
         logger.info('管理员token：' + client.admin_token)
         client.admin_rest_token = 'Bearer ' + client.admin_token
 
+        if nowTimestamp - LAST_MESSAGE_TIME > 3600*24*3:
+            logger.info('设置获取聊天记录的时间大于三天，程序已自动设置为三天前')
+            LAST_MESSAGE_TIME = nowTimestamp - 3600*24*3
         if nowTimestamp - LAST_MESSAGE_TIME > 7200:
             logger.info('开始执行未完成的任务')
         while nowTimestamp - LAST_MESSAGE_TIME >= 7200:
