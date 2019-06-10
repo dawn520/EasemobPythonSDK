@@ -6,7 +6,7 @@
 程序开始执行后，第一次会获取直到程序运行前的2小时的聊天记录
 
 #### 使用方法
-1. 复制config.example.conf文件重命名为config
+1. 复制config.example.conf文件重命名为config.conf
 2. 修改配置文件
 ```
 [huanxin]
